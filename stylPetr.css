@@ -1,0 +1,328 @@
+html,
+body {
+    margin-left: 0px;
+    padding: 0px;
+    background-color: whitesmoke;
+    font-family: 'Lato', sans-serif;
+}
+
+div {
+    margin: 0;
+    padding: 0;
+}
+
+section {
+    margin: 0;
+    padding: 0;
+}
+.navbar{
+    background-color: black;
+}
+#navItem {
+    color: whitesmoke;
+    font-size: 16px;
+}
+
+#navItem:hover {
+    color: yellow;
+}
+
+.header {
+    position: absolute;
+    top: 0;
+    text-align: center;
+    width: 100%;
+    padding-top: 40px;
+}
+
+.header * {
+    margin: 1%;
+    text-align: center;
+}
+
+#Welcome {
+    display: block;
+    animation-name: Slidein;
+    animation-duration: 3s;
+}
+
+.Moto {
+    position: relative;
+    margin-top: 3%;
+    display: block;
+    animation-name: Slidein;
+    animation-duration: 5s;
+    font-family: 'Open Sans', sans-serif;
+
+}
+
+.Anim1,
+.Anim2,
+.Anim3,
+.Anim4 {
+    margin: 0;
+    padding: 0;
+    color: whitesmoke;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.Anim1 {
+    animation-name: AnimMoto;
+    animation-duration: 8s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    animation-delay: 5s;
+}
+
+.Anim2 {
+    animation-name: AnimMoto;
+    animation-duration: 8s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    animation-delay: 7s;
+}
+
+.Anim3 {
+    animation-name: AnimMoto;
+    animation-duration: 8s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    animation-delay: 9s;
+}
+
+.Anim4 {
+    animation-name: AnimMoto;
+    animation-duration: 8s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    animation-delay: 11s;
+}
+
+@keyframes AnimMoto {
+    0% {
+        color: white;
+    }
+
+    33.3% {
+        color: rgb(86, 86, 255);
+    }
+
+    66.6% {
+        color: #1f1f1f;
+    }
+
+    100% {
+        color: white;
+    }
+}
+
+p {
+    animation-duration: 5s;
+    animation-name: slidein;
+}
+
+@keyframes Slidein {
+    from {
+        margin-left: 100%;
+        width: 300%;
+    }
+
+    to {
+        margin-left: 0%;
+        width: 100%;
+    }
+}
+
+.Nad2 {
+    color: rgb(255, 73, 73);
+    font-size: 45px;
+    font-family: 'Dancing Script', cursive;
+}
+
+.Nad1 {
+    color: whitesmoke;
+    font-size: 25px;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.CiteMoto {
+    color: whitesmoke;
+    font-size: 20px;
+    font-family: 'Dancing Script', cursive;
+}
+
+.row {
+    margin: 0;
+    padding: 0;
+}
+
+.frame {
+    border-radius: 40px;
+    background-color: rgb(155, 174, 255);
+    box-shadow: 0 0 20px black;
+    /* background-color: red; */
+    padding-bottom: 30px;
+    margin-top: 35px;
+}
+
+.JumboSkill {
+    border-radius: 25px;
+    background-color: rgb(192, 202, 247);
+    box-shadow: 15px 10px 15px black;
+    margin-top: 15px;
+}
+
+.JumboIkon {
+    background-color: rgb(192, 202, 247);
+    border: 0;
+}
+
+.Ikona {
+    width: 50px;
+    margin-top: 15px;
+    margin-left: 3px;
+    margin-right: 3px;
+}
+
+.cssProjectCard{
+    background-color: rgb(0, 22, 119);
+    border-radius: 15px;
+    margin-top: 2px;
+}
+
+.cssProjectCardIMG:hover {
+    transform: scale(1.07);
+    border-radius: 10px;
+}
+
+.cssProjectCardText{
+    color: orange;
+    margin: 0;
+    text-align: center;
+}
+
+.cssProjectCardHeader{
+    color: orange;
+}
+
+.cssProjectCardBtn{
+box-shadow: 8px 4px 8px black;
+color: orange;
+border-color: orange;
+background-color: transparent;
+height: 34px;
+border-radius:17px;
+margin-top: 20px;
+align-self:end;
+}
+
+.cssProjectCardBtn:hover{
+    background-color: orange;
+    transition: background-color 3s ease-out;
+}
+
+
+.cssProjectCardBtn:hover a{
+    color: rgb(0, 22, 119);
+    transition: color 1s ease-out;
+}
+
+
+.cssProjectCardBtnHref{
+    color: orange;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+.cssProjectCardBtn:active {
+transform: translate(2px, 1px);
+    box-shadow: 2px 1px 1px black;
+}
+
+.CarouselPicture{
+    border-radius: 20px;
+}
+
+.CaruselPictureCaptionText{
+    color: black;
+    position: absolute;
+    top: 0;
+    font-size: 18px;
+    font-weight: 900;
+    opacity: 1;
+    z-index: 2;
+}
+
+.CaruselPictureCaptionBck{
+    background-color: white;
+    padding: 2px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgb(250, 250, 250);
+    position: absolute;
+    top: 0;
+    opacity: 0.6;    
+}
+
+ul.carousel{
+    margin-top: 40px;
+font-size: 25px;
+}
+
+@media only screen and (max-width:768px){
+    ul.carousel{
+        margin-top: 10px;
+    font-size: 25px;
+    }
+}
+
+@media only screen and(max-width:992px){
+    ul.carousel{
+        margin-top: 30px;
+    font-size: 20px;
+    }
+}
+
+.footer{
+    background-color: rgb(155, 174, 255);
+    width:100%;
+    font-size: 18px;
+    margin-bottom: 0;
+}
+
+.cssContactLabel{
+    font-size: 20px;
+    font-weight: 900;
+}
+
+.cssContactText{
+    border-radius: 5px;
+    border: 0;
+    font-size: 20px;
+}
+
+.cssProjectContactBtn{
+    background-color: rgb(0, 22, 119);
+    color: orange;
+    height: 50px;
+    border-radius: 25px;
+    padding-left: 25px;
+    padding-right: 25px;
+    font-size: 20px;
+    border:0;
+    box-shadow: 4px 2px 10px black;
+}
+
+.cssProjectContactBtn:hover {
+    background-color: orange;
+    color: rgb(0, 22, 119);
+    font-weight: 900;
+    transition-property:background-color, font-weight, color;
+    transition-duration: 1s;
+    transition-timing-function: linear;
+}
+
+.cssProjectContactBtn:active {
+    transform: translate(3px, 6px);
+    box-shadow: 2px 1px 3px black;
+}

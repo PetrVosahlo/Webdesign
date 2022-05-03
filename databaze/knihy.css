@@ -1,0 +1,95 @@
+body{
+    background-image: url(books.jpg);
+    background-size: 100vw 100vh;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+}
+form{
+    display: flex;
+    justify-content: center;
+    display: block;
+}
+.radek{
+    display: flex;
+    justify-content: center;
+    flex-flow: wrap;
+}
+table{
+    border-collapse: collapse;
+    font-family: 'Roboto', sans-serif;
+}
+caption{
+    font-size: 25px;
+    font-weight: 600;
+}
+table, caption, label, input, textarea, legend{
+    background-color: rgb(234, 241, 255);
+}
+input, textarea{
+    font-size: 20px;
+    margin: 15px 0px;
+    size: 30;
+}
+a{
+    text-decoration: none;
+    color: black;
+}
+label{
+    padding: 2px 10px;
+    border-radius: 5px;
+}
+legend{
+    font-size: 30px;
+    padding: 2px 10px;
+    border-radius: 5px;
+}
+.label{
+    font-size: 20px;
+    width: 50hw;
+    min-width: 70px;
+    text-align: end;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    padding-right: 10px;
+}
+.input{
+    width: 50hw;
+    min-width: 270px;
+}
+.vysledek{
+    font-size: 30px;
+    background-color: rgb(234, 241, 255);
+    padding: 10px;
+    border-radius: 50%;
+}
+th{
+    width: 150px;
+}
+th, td, caption{
+    border: 1px Solid black;
+    margin: 0px;
+    padding: 5px 15px;
+}
+.btnRef{
+    margin: 10px 30px;
+    font-size: 30px;
+    border-radius: 30px;
+    height: 60px;
+    width: 250px;
+    background-color: lightblue;
+}
+.btnRef:hover{
+    cursor: pointer;
+    background-color: yellow;
+    transition-property: background-color;
+    transition-duration: 2s;
+}
+.btnRef:active {
+    transform: translate(3px, 3px);
+}
