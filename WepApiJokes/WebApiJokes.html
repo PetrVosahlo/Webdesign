@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
+    integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous" />
+  <link href="https://fonts.googleapis.com/css?family=Raleway:100,300,500,700" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Questrial" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+    integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous" /> -->
+  <link rel="stylesheet" href="bootstrap.min.css">
+  <link rel="stylesheet" href="css/custom.css" />
+  <title>Jokes</title>
+  <script language="JavaScript">
+    let setJokeId = 1;
+    let setJokeType = 2;
+    let userName = "";
+    //let ServerAdress = "https://localhost:44397";
+    let ServerAdress = "http://petrv.somee.com";
+    console.log("Hello");
+    function GetFirstJokeOfType(JokeType) {
+      const Http = new XMLHttpRequest();
+      const url = ServerAdress + '/Jokes/' + JokeType;
+      Http.open("GET", url);
+      Http.send();
+      let retJSON;
+      Http.onreadystatechange = (e) => {
+        retJSON = Http.responseText;
+        const obj = JSON.parse(retJSON);
+        //console.log(obj.content)
+        document.querySelector('[id="JokeText"]').innerHTML = obj.content;
+        userName = obj.userName;
+        document.querySelector('[id="UserText"]').innerHTML = "Vtip vložil uživatel: " + userName;
+        setJokeId = obj.id;
+        setJokeType = obj.jokeTypeId;
+      }
+    }
+    function GetJokeOfId(EditJokeId) {
+      const Http = new XMLHttpRequest();
+      const url = ServerAdress + '/Edit/' + EditJokeId;
+      console.log(url);
+      Http.open("GET", url);
+      Http.send();
+      let retJSON;
+      Http.onreadystatechange = (e) => {
+        retJSON = Http.responseText;
+        const obj = JSON.parse(retJSON);
+        document.querySelector('[id="JokeText"]').innerHTML = obj.content;
+        userName = obj.userName;
+        document.querySelector('[id="UserText"]').innerHTML = "Vtip vložil uživatel: " + userName;
+        setJokeId = obj.id;
+        //console.log("setJokeId"+setJokeId);
+        setJokeType = obj.jokeTypeId;
+      }
+    }
+    function GetPreviousNextJokeOfType(PrevNext) {
+      const Http = new XMLHttpRequest();
+      const url = ServerAdress + '/Jokes/' + setJokeId + ',%20' + setJokeType + ',%20' + PrevNext;
+      Http.open("GET", url);
+      Http.send();
+      let retJSON;
+      Http.onreadystatechange = (e) => {
+        retJSON = Http.responseText;
+        const obj = JSON.parse(retJSON);
+        document.querySelector('[id="JokeText"]').innerHTML = obj.content;
+        userName = obj.userName;
+        document.querySelector('[id="UserText"]').innerHTML = "Vtip vložil uživatel: " + userName;
+        setJokeId = obj.id;
+        //console.log("setJokeId"+setJokeId);
+        setJokeType = obj.jokeTypeId;
+      }
+    }
+    function EditModal() {
+      document.getElementById('Mod1Password').value = "";
+      document.getElementById('Mod1Content').value = document.querySelector('[id="JokeText"]').innerHTML;
+      document.querySelector('[id="Mod1LabelPassword"]').innerHTML = "Heslo uživatele " + userName;
+    }
+    function SaveEditJoke() {
+      const JokeJSON = {
+        "id": setJokeId,
+        "evaluation": 0,
+        "evaluationCount": 0,
+        "content": document.getElementById('Mod1Content').value,
+        "userName": userName,
+        "jokeTypeId": setJokeType,
+        "temperature": 0,
+        "sunRain": true,
+        "wind": 0,
+        "snow": true,
+        "season": 0
+      }
+      let xhr = new XMLHttpRequest(); // Creating a XHR object
+      let url = ServerAdress + "/Jokes/" + document.getElementById('Mod1Password').value;
+      xhr.open("PUT", url, true); // open a connection
+      xhr.setRequestHeader("Content-Type", "application/json"); // Set the request header i.e. which type of content you are sending
+      xhr.onreadystatechange = function () { // Create a state change callback
+        if (xhr.readyState === 4 && xhr.status === 200) {// Alert received data from server
+          const obj = JSON.parse(this.responseText);
+          alert("Vtip uložen: \n" + obj.content);
+          $('#edit').modal('hide');
+          GetJokeOfId(setJokeId);
+        } else if (xhr.readyState === 4 && xhr.status === 401) {
+          alert("Zadáno neplatné heslo uživatele, který vtip vložil do databáze.");
+        } else if (xhr.readyState === 4 && xhr.status === 405) {
+          alert("Je nutné zadat heslo uživatele, který vtip vložil do databáze.");
+        }
+      };
+      var data = JSON.stringify(JokeJSON); // Converting JSON data to string
+      xhr.send(data);// Sending data with the request
+    }
+    function DeleteModal() {
+      document.getElementById('Mod2Password').value = "";
+      document.querySelector('[id="Mod2LabelPassword"]').innerHTML = "Heslo uživatele " + userName;
+    }
+    function DeleteJoke() {
+      let xhr = new XMLHttpRequest(); // Creating a XHR object
+      let url = ServerAdress + "/Jokes/" + setJokeId + ",%20" + document.querySelector('[id="Mod2Password"]').value;
+      xhr.open("DELETE", url, true); // open a connection
+      xhr.setRequestHeader("Content-Type", "application/json"); // Set the request header i.e. which type of content you are sending
+      xhr.onreadystatechange = function () { // Create a state change callback
+        if (xhr.readyState === 4 && xhr.status === 200) {// Alert received data from server
+          const obj = JSON.parse(this.responseText);
+          alert("Vtip vymazán: \n" + obj.content);
+          $('#delete').modal('hide');
+          GetPreviousNextJokeOfType("true");
+        } else if (xhr.readyState === 4 && xhr.status === 401) {
+          alert("Zadáno neplatné heslo uživatele, který vtip vložil do databáze.");
+        } else if (xhr.readyState === 4 && xhr.status === 404) {
+          alert("Je nutné zadat heslo uživatele, který vtip vložil do databáze.");
+        }
+      };
+      xhr.send();// Sending data with the request
+    }
+  </script>
+
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-md navbar-light bg-white">
+    <a href="WebApiJokes.html" class="navbar-brand">
+      <h3 class="mb-0">Peter's jokes</h3>
+    </a>
+
+    <button class="navbar-toggler" data-toggle="collapse" data-target="#mainNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a href="WebApiJokes_Insert.html" class="nav-link">Vložit vtip</a>
+        </li>
+        <li class="nav-item">
+          <a href="WebApiJokes.html" class="nav-link">Číst vtipy</a>
+        </li>
+        <!-- <li class="nav-item">
+          <a href="#kontakt" class="nav-link">Contact</a>
+        </li> -->
+      </ul>
+    </div>
+  </nav>
+  <section id="showcase" class="d-flex justify-content-center align-items-top">
+    <!-- //<div id="overlay bg-primary"></div> -->
+    <div class="container-fluid mt-5">
+      <div class="row">
+        <div class="col-3">
+          <button class="btn-lg btn-block btn-primary " onclick="GetFirstJokeOfType(1)">Židovské</button>
+          <button class="btn-lg  btn-block btn-primary " onclick="GetFirstJokeOfType(2)">Počasí</button>
+          <button class="btn-lg  btn-block btn-primary " onclick="GetFirstJokeOfType(3)">Škola</button>
+          <button class="btn-lg  btn-block btn-primary " onclick="GetFirstJokeOfType(4)">Zvířátka</button>
+          <button class="btn-lg  btn-block btn-primary " onclick="GetFirstJokeOfType(5)">Lordi</button>
+          <button class="btn-lg  btn-block btn-primary " onclick="GetFirstJokeOfType(6)">Doktoři</button>
+        </div>
+        <div class="col-9">
+          <div class="row mb-5">
+            <div class="col-1"></div>
+            <div class="col-2">
+              <button class="btn-lg btn-block btn-success"
+                onclick="GetPreviousNextJokeOfType('false')">Předchozí</button>
+            </div>
+            <div class="col-1"></div>
+            <div class="col-2 d-flex align-items-center">
+              <div class="col-9">
+                <button class="btn-sm btn-block btn-second " data-toggle="modal" data-target="#edit"
+                  onclick="EditModal()">Editovat</button>
+              </div>
+            </div>
+            <div class="col-2 d-flex align-items-center">
+              <div class="col-9">
+                <button class="btn-sm btn-block btn-second " data-toggle="modal" data-target="#delete"
+                  onclick="DeleteModal()">Smazat</button>
+              </div>
+            </div>
+            <div class="col-1"></div>
+            <div class="col-2">
+              <button class="btn-lg btn-block btn-success "
+                onclick="GetPreviousNextJokeOfType('true')">Následující</button>
+            </div>
+            <div class="col col-1"></div>
+          </div>
+          <div class="row">
+            <div class="col-10 offset-1">
+              <h3 class="bg-success text-white rounded" id="JokeText"></h3>
+              <div class="col-4 p-0 pt-2 text-center">
+                <h5 class="bg-primary text-white rounded" id="UserText"></h5>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+    <!-- </div> -->
+  </section>
+  <section>
+    <div class="modal" id="edit" tabindex="-1" role="dialog">
+      <!--  id="booking" == na toto musím nasměrovat tlačítko otevírající okno-->
+      <!--  do prvku otevírajícího modal: data-toggle="modal" data-target="#ID_MODALU_TADY_BOOKING"-->
+      <!--  tabindex="-1" == výchozí stav je, že není vidět-->
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <!--  obsah modalu - jednotlivé sekce header, body, footer-->
+          <div class="modal-header">
+            <h5 class="modal-title">Editace vtipu</h5>
+            <!--  nadpis modalu-->
+            <button type="button" class="close" data-dismiss="modal" aria-label="close">
+              <!--  křížek v pravo nahoře který modal zavře-->
+              <!--  data-dismiss="modal" == říká zavři modál-->
+              <span aria-hidden="true">&times;</span>
+              <!--&times; == křížek-->
+            </button>
+          </div>
+          <div class="modal-body">
+            <!--tělo modalu, může zde být cokoli, zde je jednoduchý fomulář-->
+            <form>
+              <div class="form-inline mt-2">
+                <div class="col-xsm-12 col-sm-6">
+                  <label for="Mod1Password" id="Mod1LabelPassword"
+                    class="control-label float-xsm-left float-sm-right bg-light rounded"></label>
+                </div>
+                <input class="col-xsm-12 col-sm-5 col-md-3" type="password" class="form-control" name="JokePassword"
+                  id="Mod1Password" required />
+              </div>
+              <div class="form-group mt-4">
+                <div class="col-10 offset-1 p-0">
+                  <label for="Mod1Content" class="control-label bg-light rounded">&nbsp;Vtip&nbsp;</label>
+                </div>
+                <textarea class="col-10 offset-1 form-control" name="JokeContent" id="Mod1Content" required></textarea>
+              </div>
+            </form>
+          </div>
+          <div class=" modal-footer">
+            <!--zavírací tlačítka modalu-->
+            <button class="btn btn-primary" onclick="SaveEditJoke()">Uložit</button>
+            <button class="btn btn-secondary" data-dismiss="modal">Zrušit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section>
+    <div class="modal" id="delete" tabindex="-1" role="dialog">
+      <!--  id="booking" == na toto musím nasměrovat tlačítko otevírající okno-->
+      <!--  do prvku otevírajícího modal: data-toggle="modal" data-target="#ID_MODALU_TADY_BOOKING"-->
+      <!--  tabindex="-1" == výchozí stav je, že není vidět-->
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <!--  obsah modalu - jednotlivé sekce header, body, footer-->
+          <div class="modal-header">
+            <h5 class="modal-title">Smazání vtipu</h5>
+            <!--  nadpis modalu-->
+            <button type="button" class="close" data-dismiss="modal" aria-label="close">
+              <!--  křížek v pravo nahoře který modal zavře-->
+              <!--  data-dismiss="modal" == říká zavři modál-->
+              <span aria-hidden="true">&times;</span>
+              <!--&times; == křížek-->
+            </button>
+          </div>
+          <div class="modal-body">
+            <!--tělo modalu, může zde být cokoli, zde je jednoduchý fomulář-->
+            <form>
+              <div class="form-inline mt-2">
+                <div class="col-xsm-12 col-sm-6">
+                  <label for="Mod2Password" id="Mod2LabelPassword"
+                    class="control-label float-xsm-left float-sm-right bg-light rounded"></label>
+                </div>
+                <input class="col-xsm-12 col-sm-5 col-md-3" type="password" class="form-control" name="JokePassword"
+                  id="Mod2Password" required />
+              </div>
+            </form>
+          </div>
+          <div class=" modal-footer">
+            <!--zavírací tlačítka modalu-->
+            <button class="btn btn-primary" onclick="DeleteJoke()">Vymazat</button>
+            <button class="btn btn-secondary" data-dismiss="modal">Zrušit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script src="https://cdn.jsdelivr.net/gh/cferdinandi/smooth-scroll@15/dist/smooth-scroll.polyfills.min.js"></script>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+    integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    crossorigin="anonymous"></script>
+  <script src="bootstrap/dist/js/bootstrap.min.js"></script>
+
+  <script src="kolosalon.js"></script>
+
+  <script type="text/javascript">
+    $(function () {
+      var scroll = new SmoothScroll('a[href*="section-"]');
+    });
+    $(document).ready(function () {
+      $(".navbar-nav li a").click(function (event) {
+        $(".navbar-collapse").collapse('hide');
+      });
+    });
+  </script>
+</body>
+
+</html>
