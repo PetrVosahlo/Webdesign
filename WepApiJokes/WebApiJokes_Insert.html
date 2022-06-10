@@ -54,10 +54,10 @@
           document.Joke.JokePassword.value="";
           document.Joke.JokeContent.value="";
         }else if (xhr.readyState === 4 && xhr.status === 401){
-          alert("Zadáno neplatné heslo uživatele.");
+          alert("Zadáno neplatné heslo uživatele.\nHeslo uživatele Návštěvník je \"n\".");
           document.Joke.JokePassword.value="";
         }else if (xhr.readyState === 4 && xhr.status === 405){
-          alert("Je nutné vyplnit heslo uživatele.");
+          alert("Je nutné vyplnit heslo uživatele.\nHeslo uživatele Návštěvník je \"n\".");
         }
       };
       var data = JSON.stringify(JokeJSON); // Converting JSON data to string
@@ -121,11 +121,13 @@
         </div>
         <div class="form-inline mt-2">
           <div class="col-xsm-12 col-sm-6">
-            <label for="txt1" class="control-label float-xsm-left float-sm-right bg-light rounded">&nbsp;Heslo pro
-              změnu&nbsp;</label>
+            <label for="txt1" class="control-label float-xsm-left float-sm-right bg-light rounded">&nbsp;Heslo uživatele&nbsp;</label>
           </div>
           <input class="col-xsm-12 col-sm-5 col-md-3" type="password" class="form-control" name="JokePassword" id="txt1"
             required />
+        </div>
+        <div class="col-12 text-center">
+          <span class="text-muted bg-light rounded">&nbsp;Heslo uživatele Návštěvník je "n".&nbsp;</spans>
         </div>
         <div class="form-group mt-4">
           <div class="col-10 offset-1 p-0">
