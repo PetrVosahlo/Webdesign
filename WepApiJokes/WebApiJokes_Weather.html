@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <!-- <link rel="stylesheet" href="bootstrap.min.css"> -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+    integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous" />
+  <link rel="stylesheet" href="css/custom.css" />
+  <title>Jokes</title>
+  <script language="JavaScript">
+    //let ServerAdress = "https://localhost:44397";
+    let ServerAdress = "http://petrv.somee.com";
+    let town = "Hradec_Kralove";
+    let country = "Czech_Republic"
+    let jokeId = 1;
+    let weather_code;
+    let temperature;
+    let wind_speed;
+    function GetWeatherAndJokeForCity() {
+      town = document.getElementById('selTown').value;
+      let selCountry = document.getElementById('selTown');
+      country = selCountry.options[selCountry.selectedIndex].getAttribute('country');
+      switch (country) {
+        case "Czech_Republic": document.getElementById('spanCountry').innerText = "Česká republika"; country = "Czech_Republic"; break;
+        case "Yemen": document.getElementById('spanCountry').innerText = "Jemenská republika"; country = "Yemen"; break;
+        case "Russia": document.getElementById('spanCountry').innerText = "Ruská federace"; country = "Russia"; break;
+        case "Colombia": document.getElementById('spanCountry').innerText = "Kolumbijská republika"; country = "Colombia"; break;
+        case "New_Zealand": document.getElementById('spanCountry').innerText = "Nový Zéland"; country = "New_Zealand"; break;
+        case "Uganda": document.getElementById('spanCountry').innerText = "Ugandská republika"; country = "Uganda"; break;
+      }
+      const url = ServerAdress + '/weather/WeatherStack/' + town + ',%20' + country;
+      SendGetRequest(url);
+    }
+    function TestWeatherAndJokeForCity() {
+      settedWeather_code = document.getElementById("checkWeatherCode").value;
+      const url = ServerAdress + '/weather/WeatherTest/' + settedWeather_code;
+      SendGetRequest(url);
+    }
+
+    function SendGetRequest(url) {
+      const Http = new XMLHttpRequest();
+      //const url = ServerAdress + '/weather/WeatherStack/' + town + ',%20' + country;
+      console.log(url)
+      Http.open("GET", url);
+      Http.send();
+      let retJSON;
+      Http.onreadystatechange = (e) => {
+        retJSON = Http.responseText;
+        const obj = JSON.parse(retJSON);
+        console.log(obj);
+        weather_code = obj.weather_code;
+        temperature = obj.temperature;
+        wind_speed = obj.windSpeed;
+        document.querySelector('[id="divPicture"]').innerHTML = '<img src="' + obj.pictureAddress + '" class="img-responsive rounded" temp="Weather picture" />';
+        document.getElementById('description').innerText = obj.description;
+        document.getElementById('temperature').innerText = temperature + " °C";
+        document.getElementById('windSpeed').innerText = wind_speed + " km/h";
+        document.getElementById('humidity').innerText = obj.humidity + " %";
+        document.querySelector('[id="JokeText"]').innerText = obj.content;
+        document.querySelector('[id="UserText"]').innerText = "Vtip vložil uživatel: Petr";
+        jokeId = obj.id;
+      }
+    }
+
+    function GetPreviousNextWeatherJoke(PrevNext) {
+      const Http = new XMLHttpRequest();
+      const url = ServerAdress + '/weather/WeatherStackPreviousNext/' + weather_code + ',%20' + temperature + ',%20' + wind_speed + ',%20' + jokeId + ',%20' + PrevNext;
+      console.log(url);
+      Http.open("GET", url);
+      Http.send();
+      let retJSON;
+      Http.onreadystatechange = (e) => {
+        retJSON = Http.responseText;
+        const obj = JSON.parse(retJSON);
+        console.log(obj)
+        document.querySelector('[id="JokeText"]').innerText = obj.Content;
+        document.querySelector('[id="UserText"]').innerText = "Vtip vložil uživatel: Petr";
+        jokeId = obj.Id;
+      }
+    }
+    window.onload = function () {
+      GetWeatherAndJokeForCity();
+    }
+  </script>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-md navbar-light bg-white">
+    <a href="WebApiJokes.html" class="navbar-brand">
+      <h3 class="mb-0">Peter's jokes</h3>
+    </a>
+
+    <button class="navbar-toggler" data-toggle="collapse" data-target="#mainNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a href="WebApiJokes_Weather.html" class="nav-link">Počasí se vtipem</a>
+        </li>
+        <li class="nav-item">
+          <a href="WebApiJokes_Insert.html" class="nav-link">Vložit vtip</a>
+        </li>
+        <li class="nav-item">
+          <a href="WebApiJokes.html" class="nav-link">Číst vtipy</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <section id="showcase">
+    <div class="container p-1 p-sm-3">
+      <div class="row justify-content-center">
+        <div class="d-none d-sm-block h1 text-center">
+          Náladu zlepší vtip hodící se k dneštnímu počasí.
+        </div>
+        <div class="d-sm-none h5 text-center bg-light p-1">
+          Náladu zlepší vtip hodící se k dneštnímu počasí.
+        </div>
+      </div>
+      <form class="form-inline col-12 my-2" name="Joke" action="">
+        <!-- <div class="form-inline"> -->
+        <div class="form-inline col-12 col-sm-6 justify-content-sm-end p-0">
+          <label for="selTown" class="col-6 col-sm-3 col-xl-2 control-label text-center bg-white rounded p-1">
+            Město</label>
+          <select class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4 text-center form-control ml-sm-1 my-0" name="User"
+            id="selTown" onchange="GetWeatherAndJokeForCity()">
+            <option value="Hradec_Kralove" country="Czech_Republic">Hradec Králové</option>
+            <option value="Praha" country="Czech_Republic">Praha</option>
+            <option value="Aden" country="Yemen">Aden</option>
+            <option value="Ojmjakon" country="Russia">Ojmjakon</option>
+            <option value="Quibdó" country="Colombia">Quibdó</option>
+            <option value="Wellington" country="New_Zealand">Wellington</option>
+            <option value="Kampala" country="Uganda">Kampala</option>
+          </select>
+        </div>
+        <div
+          class="col-sm-5 col-md-4 col-lg-3 text-center text-lg-left bg-white rounded p-1 pl-lg-3 ml-sm-4 mt-2 mt-sm-0">
+          Země: <span id="spanCountry">Česká republika</span>
+        </div>
+      </form>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div id="divPicture" class="col-sm-5 col-lg-4 col-xl-3 offset-lg-1 border-light my-auto">
+          <!-- <img id="PictureAddress" src="./images/113_Sunny.jpg" class="img-responsive rounded" temp="Weather picture" /> -->
+        </div>
+        <div class="col-sm-7 col-lg-6 col-xl-7 text-right my-auto">
+          <div class="row my-sm-1 my-1 my-md-2 my-lg-3">
+            <div class="col-12 col-sm-4 col-xl-3 rounded align-self-center text-left text-sm-right bg-light">
+              Popis:
+            </div>
+            <div id="description" class="col-12 col-sm-8 col-xl-9 align-self-center rounded text-left bg-white">
+            </div>
+          </div>
+          <div class="row my-sm-1 my-1 my-md-2 my-lg-3">
+            <div class="col-12 col-sm-4 col-xl-3 rounded text-left text-sm-right bg-light">
+              Teplota:
+            </div>
+            <div id="temperature"
+              class="col-12 col-sm-8 col-xl-9 align-self-center rounded text-center text-sm-left bg-white">
+            </div>
+          </div>
+          <div class="row my-sm-1 my-1 my-md-2 my-lg-3">
+            <div class="col-12 col-sm-4 col-xl-3 rounded text-left text-sm-right bg-light">
+              Rychlost větru:
+            </div>
+            <div id="windSpeed"
+              class="col-12 col-sm-8 col-xl-9 align-self-center rounded text-center text-sm-left bg-white">
+            </div>
+          </div>
+          <div class="row my-sm-1 my-1 my-md-2 my-lg-3">
+            <div class="col-12 col-sm-4 col-xl-3 rounded text-left text-sm-right bg-light">
+              Vlhkost:
+            </div>
+            <div id="humidity"
+              class="col-12 col-sm-8 col-xl-9 align-self-center rounded text-center text-sm-left bg-white">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="row">
+      <label for="checkWeatherCode">Zadej WeathereCode: </label>
+      <input type="text" id="checkWeatherCode" placeholder="weatherCode" />
+      <button onclick="TestWeatherAndJokeForCity()">Test</buton>
+    </div> -->
+    <div class="container">
+      <div class="form-group mt-4">
+        <div class="row d-flex justify-content-around my-3">
+          <div class="col-12 col-sm-4 col-lg-3 col-xl-2 my-1 my-sm-0">
+            <button class="btn-lg btn-block btn-success"
+              onclick="GetPreviousNextWeatherJoke('false')">Předchozí</button>
+          </div>
+          <div class="col-12 col-sm-4 col-lg-3 col-xl-2">
+            <button class="btn-lg btn-block btn-success"
+              onclick="GetPreviousNextWeatherJoke('true')">Následující</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 col-lg-10 offset-lg-1 pl-3">
+            <h3 class="bg-success text-white rounded p-1" id="JokeText"></h3>
+            <div class="col-sm-8 col-md-6 col-lg-5 col-xl-4 p-0 text-center">
+              <h5 class="bg-primary text-white rounded" id="UserText"></h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"
+    integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/gh/cferdinandi/smooth-scroll@15/dist/smooth-scroll.polyfills.min.js"></script>
+
+  <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+    integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    crossorigin="anonymous"></script>
+  <script src="bootstrap/dist/js/bootstrap.min.js"></script> -->
+
+  <script src="kolosalon.js"></script>
+
+  <script type="text/javascript">
+    $(function () {
+      var scroll = new SmoothScroll('a[href*="section-"]');
+    });
+    $(document).ready(function () {
+      $(".navbar-nav li a").click(function (event) {
+        $(".navbar-collapse").collapse('hide');
+      });
+    });
+  </script>
+</body>
+
+</html>
