@@ -5,9 +5,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <!-- <link rel="stylesheet" href="bootstrap.min.css"> -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
-    integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous" />
+  <link rel="stylesheet" href="bootstrap.min.css">
+  <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+    integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous" /> -->
   <link rel="stylesheet" href="css/custom.css" />
   <title>Jokes</title>
   <script language="JavaScript">
@@ -20,17 +20,25 @@
     let temperature;
     let wind_speed;
     function GetWeatherAndJokeForCity() {
+      let townId;
+      console.log("OK ");
       town = document.getElementById('selTown').value;
-      let selCountry = document.getElementById('selTown');
-      country = selCountry.options[selCountry.selectedIndex].getAttribute('country');
-      switch (country) {
-        case "Czech_Republic": document.getElementById('spanCountry').innerText = "Česká republika"; country = "Czech_Republic"; break;
-        case "Yemen": document.getElementById('spanCountry').innerText = "Jemenská republika"; country = "Yemen"; break;
-        case "Russia": document.getElementById('spanCountry').innerText = "Ruská federace"; country = "Russia"; break;
-        case "Colombia": document.getElementById('spanCountry').innerText = "Kolumbijská republika"; country = "Colombia"; break;
-        case "New_Zealand": document.getElementById('spanCountry').innerText = "Nový Zéland"; country = "New_Zealand"; break;
-        case "Uganda": document.getElementById('spanCountry').innerText = "Ugandská republika"; country = "Uganda"; break;
+      let selTown = document.getElementById('selTown');
+      townId = selTown.options[selTown.selectedIndex].getAttribute('townId');
+      switch (townId) {
+        case "Hk": document.getElementById('spanDescription').innerHTML = "<strong>Průměrná roční teplota 9, 2 °C.<br />Průměrné srážky za rok cca. 630 mm.</strong><br />Země: Česká republika, počet obyvatel: 92 763<br />"
+          ; country = "Czech_Republic"; break;
+        case "Pr": document.getElementById('spanDescription').innerHTML = "<strong>Průměrná roční teplota 10, 8 °C.<br />Průměrné srážky za rok cca. 500 mm.</strong > <br />Země: Česká republika, počet obyvatel: 1 275 406 <br />"
+        ; country = "Czech_Republic"; break;
+        case "Me": document.getElementById('spanDescription').innerHTML = "<strong>Město s jednou z nejvyšších průměrných teplot v Asii.<br />Průměrná roční teplota je kolem 29 °C (dle zdroje).</strong > <br />Země: Království Saúdská Arábie, počet obyvatel: 2 000 000"
+        ; country = "Saudi_Arabia"; break;
+        // case "Oj": document.getElementById('spanDescription').innerHTML = "<strong>Jendo z nejchladnějších trvale obydlených míst na zemi.<br /> Průměrná teplota za leden, únor a prosinec zůstává pod –40 °C.</strong > <br />Země: Ruská federace, počet obyvatel: 550"; country = "Russia"; break;
+        case "Qu": document.getElementById('spanDescription').innerHTML = "<strong> Nejdeštivější město na světě.<br /> Průměrné srážky za rok jsou 7 000 mm - 8 000 mm (dle zdroje)</strong > <br />Země: Kolumbie, počet obyvatel: 129 237"; country = "Choco"; break;
+        case "We": document.getElementById('spanDescription').innerHTML = "<strong>Největrnější město na světě.<br /> Průměrná rychlost větru za celý rok je 22 km/h a za září téměř 27 km/h.</strong > <br />Země: Nový Zéland, počet obyvatel: 180 000<br />"
+        ; country = "New_Zealand"; break;
+        case "Bo": document.getElementById('spanDescription').innerHTML = "<strong>Jedno z měst s nejvyšším výskytem bouřek na světě.<br />Město leží na úpatí sopky, na které bývá cca. 320 dní s bouřkou v roce.</strong > <br />Země: Indonésie, počet obyvatel: 1 091 396"; country = "Indonesia"; break;
       }
+
       const url = ServerAdress + '/weather/WeatherStack/' + town + ',%20' + country;
       SendGetRequest(url);
     }
@@ -42,8 +50,6 @@
 
     function SendGetRequest(url) {
       const Http = new XMLHttpRequest();
-      //const url = ServerAdress + '/weather/WeatherStack/' + town + ',%20' + country;
-      console.log(url)
       Http.open("GET", url);
       Http.send();
       let retJSON;
@@ -115,31 +121,30 @@
     <div class="container p-1 p-sm-3">
       <div class="row justify-content-center">
         <div class="d-none d-sm-block h1 text-center">
-          Náladu zlepší vtip hodící se k dneštnímu počasí.
+          Náladu zlepší vtip hodící se k dnešnímu počasí.
         </div>
         <div class="d-sm-none h5 text-center bg-light p-1">
-          Náladu zlepší vtip hodící se k dneštnímu počasí.
+          Náladu zlepší vtip hodící se k dnešnímu počasí.
         </div>
       </div>
       <form class="form-inline col-12 my-2" name="Joke" action="">
         <!-- <div class="form-inline"> -->
-        <div class="form-inline col-12 col-sm-6 justify-content-sm-end p-0">
-          <label for="selTown" class="col-6 col-sm-3 col-xl-2 control-label text-center bg-white rounded p-1">
+        <div class="form-inline col-12 col-sm-4 col-md-3 col-xl-4 justify-content-center justify-content-xl-end p-0">
+          <label for="selTown" class="col-6 col-sm-5 col-xl-2 control-label text-center bg-white rounded p-1">
             Město</label>
-          <select class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4 text-center form-control ml-sm-1 my-0" name="User"
+          <select class="col-12 col-lg-9 col-xl-6 text-center form-control ml-sm-1 my-2" name="User"
             id="selTown" onchange="GetWeatherAndJokeForCity()">
-            <option value="Hradec_Kralove" country="Czech_Republic">Hradec Králové</option>
-            <option value="Praha" country="Czech_Republic">Praha</option>
-            <option value="Aden" country="Yemen">Aden</option>
-            <option value="Ojmjakon" country="Russia">Ojmjakon</option>
-            <option value="Quibdó" country="Colombia">Quibdó</option>
-            <option value="Wellington" country="New_Zealand">Wellington</option>
-            <option value="Kampala" country="Uganda">Kampala</option>
+            <option value="Hradec_Kralove" townId="Hk">Hradec Králové</option>
+            <option value="Praha" townId="Pr">Praha</option>
+            <option value="Mecca" townId="Me">Mekka</option>
+            <!-- <option value="Ojmjakon" townId="Oj">Ojmjakon</option> -->
+            <option value="Quibdó" townId="Qu">Quibdó</option>
+            <option value="Wellington" townId="We">Wellington</option>
+            <option value="Bogor" townId="Bo">Bogor</option>
           </select>
         </div>
-        <div
-          class="col-sm-5 col-md-4 col-lg-3 text-center text-lg-left bg-white rounded p-1 pl-lg-3 ml-sm-4 mt-2 mt-sm-0">
-          Země: <span id="spanCountry">Česká republika</span>
+        <div class="col-sm-7 col-md-4 col-md-8 col-xl-7 text-center text-md-left bg-white rounded p-1 pl-lg-3 ml-sm-4 mt-2 mt-sm-0">
+          <span id="spanDescription">TEXT GENERATED BY GetWeatherAndJokeForCity()</span>
         </div>
       </form>
     </div>
