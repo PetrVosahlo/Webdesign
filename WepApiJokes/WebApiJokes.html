@@ -1,134 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="cz">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <link rel="stylesheet" href="bootstrap.min.css">
   <link rel="stylesheet" href="css/custom.css" />
-  <script language="JavaScript" src="WebApiJokes.js"> JAVA_SCRIPT </script> -->
+  <script language="JavaScript" src='./WebApiJokes.js'> JAVA_SCRIPT </script>
   <title>Jokes</title>
-  <!-- <script language="JavaScript">
-    let setJokeId = 1;
-    let setJokeType = 2;
-    let userName = "";
-    let ServerAdress = "https://localhost:44397";
-    //let ServerAdress = "http://petrv.somee.com";
-    console.log("Hello");
-    function GetFirstJokeOfType(JokeType) {
-      const Http = new XMLHttpRequest();
-      const url = ServerAdress + '/Jokes/' + JokeType;
-      Http.open("GET", url);
-      Http.send();
-      let retJSON;
-      Http.onreadystatechange = (e) => {
-        retJSON = Http.responseText;
-        const obj = JSON.parse(retJSON);
-        //console.log(obj.content)
-        document.querySelector('[id="JokeText"]').innerHTML = obj.content;
-        userName = obj.userName;
-        document.querySelector('[id="UserText"]').innerHTML = "Vtip vložil uživatel: " + userName;
-        setJokeId = obj.id;
-        setJokeType = obj.jokeTypeId;
-      }
-    }
-    function GetJokeOfId(EditJokeId) {
-      const Http = new XMLHttpRequest();
-      const url = ServerAdress + '/Edit/' + EditJokeId;
-      console.log(url);
-      Http.open("GET", url);
-      Http.send();
-      let retJSON;
-      Http.onreadystatechange = (e) => {
-        retJSON = Http.responseText;
-        const obj = JSON.parse(retJSON);
-        document.querySelector('[id="JokeText"]').innerHTML = obj.content;
-        userName = obj.userName;
-        document.querySelector('[id="UserText"]').innerHTML = "Vtip vložil uživatel: " + userName;
-        setJokeId = obj.id;
-        //console.log("setJokeId"+setJokeId);
-        setJokeType = obj.jokeTypeId;
-      }
-    }
-    function GetPreviousNextJokeOfType(PrevNext) {
-      const Http = new XMLHttpRequest();
-      const url = ServerAdress + '/Jokes/' + setJokeId + ',%20' + setJokeType + ',%20' + PrevNext;
-      Http.open("GET", url);
-      Http.send();
-      let retJSON;
-      Http.onreadystatechange = (e) => {
-        retJSON = Http.responseText;
-        const obj = JSON.parse(retJSON);
-        document.querySelector('[id="JokeText"]').innerHTML = obj.content;
-        userName = obj.userName;
-        document.querySelector('[id="UserText"]').innerHTML = "Vtip vložil uživatel: " + userName;
-        setJokeId = obj.id;
-        //console.log("setJokeId"+setJokeId);
-        setJokeType = obj.jokeTypeId;
-      }
-    }
-    function EditModal() {
-      document.getElementById('Mod1Password').value = "";
-      document.getElementById('Mod1Content').value = document.querySelector('[id="JokeText"]').innerHTML;
-      document.querySelector('[id="Mod1LabelPassword"]').innerHTML = "Heslo uživatele " + userName;
-    }
-    function SaveEditJoke() {
-      const JokeJSON = {
-        "id": setJokeId,
-        "evaluation": 0,
-        "evaluationCount": 0,
-        "content": document.getElementById('Mod1Content').value,
-        "userName": userName,
-        "jokeTypeId": setJokeType,
-        "temperature": 0,
-        "sunRain": true,
-        "wind": 0,
-        "snow": true,
-        "season": 0
-      }
-      let xhr = new XMLHttpRequest(); // Creating a XHR object
-      let url = ServerAdress + "/Jokes/" + document.getElementById('Mod1Password').value;
-      xhr.open("PUT", url, true); // open a connection
-      xhr.setRequestHeader("Content-Type", "application/json"); // Set the request header i.e. which type of content you are sending
-      xhr.onreadystatechange = function () { // Create a state change callback
-        if (xhr.readyState === 4 && xhr.status === 200) {// Alert received data from server
-          const obj = JSON.parse(this.responseText);
-          alert("Vtip uložen: \n" + obj.content);
-          $('#edit').modal('hide');
-          GetJokeOfId(setJokeId);
-        } else if (xhr.readyState === 4 && xhr.status === 401) {
-          alert("Zadáno neplatné heslo uživatele, který vtip vložil do databáze.\nHeslo uživatele Návštěvník je \"n\".");
-        } else if (xhr.readyState === 4 && xhr.status === 405) {
-          alert("Je nutné zadat heslo uživatele, který vtip vložil do databáze.\nHeslo uživatele Návštěvník je \"n\".");
-        }
-      };
-      var data = JSON.stringify(JokeJSON); // Converting JSON data to string
-      xhr.send(data);// Sending data with the request
-    }
-    function DeleteModal() {
-      document.getElementById('Mod2Password').value = "";
-      document.querySelector('[id="Mod2LabelPassword"]').innerHTML = "Heslo uživatele " + userName;
-    }
-    function DeleteJoke() {
-      let xhr = new XMLHttpRequest(); // Creating a XHR object
-      let url = ServerAdress + "/Jokes/" + setJokeId + ",%20" + document.querySelector('[id="Mod2Password"]').value;
-      xhr.open("DELETE", url, true); // open a connection
-      xhr.setRequestHeader("Content-Type", "application/json"); // Set the request header i.e. which type of content you are sending
-      xhr.onreadystatechange = function () { // Create a state change callback
-        if (xhr.readyState === 4 && xhr.status === 200) {// Alert received data from server
-          const obj = JSON.parse(this.responseText);
-          alert("Vtip vymazán: \n" + obj.content);
-          $('#delete').modal('hide');
-          GetPreviousNextJokeOfType("true");
-        } else if (xhr.readyState === 4 && xhr.status === 401) {
-          alert("Zadáno neplatné heslo uživatele, který vtip vložil do databáze.\nHeslo uživatele Návštěvník je \"n\".");
-        } else if (xhr.readyState === 4 && xhr.status === 404) {
-          alert("Je nutné zadat heslo uživatele, který vtip vložil do databáze.\nHeslo uživatele Návštěvník je \"n\".");
-        }
-      };
-      xhr.send();// Sending data with the request
-    }
-  </script> -->
 </head>
 
 <body>
@@ -162,12 +42,12 @@
     <div class="container-fluid mt-5">
       <div class="row">
         <div class="d-none d-sm-block col-12 col-sm-3 col-lg-2">
-          <button class="btn-lg btn-block btn-primary" onclick="GetFirstJokeOfType(1)">Židovské</button>
-          <button class="btn-lg btn-block btn-primary" onclick="GetFirstJokeOfType(2)">O bohu</button>
-          <button class="btn-lg  btn-block btn-primary" onclick="GetFirstJokeOfType(3)">Škola</button>
-          <button class="btn-lg  btn-block btn-primary" onclick="GetFirstJokeOfType(4)">Zvířátka</button>
-          <button class="btn-lg  btn-block btn-primary" onclick="GetFirstJokeOfType(5)">Lordi</button>
-          <button class="btn-lg  btn-block btn-primary" onclick="GetFirstJokeOfType(6)">Doktoři</button>
+          <button class="btn-lg btn-block btn-primary" onclick='GetFirstJokeOfType(1)'>Židovské</button>
+          <button class="btn-lg btn-block btn-primary" onclick='GetFirstJokeOfType(2)'>O bohu</button>
+          <button class="btn-lg  btn-block btn-primary" onclick='GetFirstJokeOfType(3)'>Škola</button>
+          <button class="btn-lg  btn-block btn-primary" onclick='GetFirstJokeOfType(4)'>Zvířátka</button>
+          <button class="btn-lg  btn-block btn-primary" onclick='GetFirstJokeOfType(5)'>Lordi</button>
+          <button class="btn-lg  btn-block btn-primary" onclick='GetFirstJokeOfType(6)'>Doktoři</button>
         </div>
         <div class="d-inline d-sm-none col-12 col-sm-3 col-lg-2">
           <div class="d-flex justify-content-between my-2">
@@ -322,6 +202,7 @@
       </div>
     </div>
   </section>
+  
   <script src="https://cdn.jsdelivr.net/gh/cferdinandi/smooth-scroll@15/dist/smooth-scroll.polyfills.min.js"></script>
 
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -331,8 +212,6 @@
     integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
     crossorigin="anonymous"></script>
   <script src="bootstrap/dist/js/bootstrap.min.js"></script>
-
-  <script src="kolosalon.js"></script>
 
   <script type="text/javascript">
     $(function () {

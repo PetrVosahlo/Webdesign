@@ -11,87 +11,6 @@
   <link rel="stylesheet" href="css/custom.css" />
   <script language="JavaScript" src="WebApiJokes.js"> JAVA_SCRIPT </script>
   <title>Jokes</title>
-  <!-- <script language="JavaScript">
-    let ServerAdress = "https://localhost:44397";
-    //let ServerAdress = "http://petrv.somee.com";s
-    let town = "Hradec_Kralove";
-    let country = "Czech_Republic"
-    let jokeId = 1;
-    let weather_code;
-    let temperature;
-    let wind_speed;
-    function GetWeatherAndJokeForCity() {
-      let townId;
-      console.log("OK ");
-      town = document.getElementById('selTown').value;
-      let selTown = document.getElementById('selTown');
-      townId = selTown.options[selTown.selectedIndex].getAttribute('townId');
-      switch (townId) {
-        case "Hk": document.getElementById('spanDescription').innerHTML = "<strong>Průměrná roční teplota 9, 2 °C.<br />Průměrné srážky za rok cca. 630 mm.</strong><br />Země: Česká republika, počet obyvatel: 92 763<br />"
-          ; country = "Czech_Republic"; break;
-        case "Pr": document.getElementById('spanDescription').innerHTML = "<strong>Průměrná roční teplota 10, 8 °C.<br />Průměrné srážky za rok cca. 500 mm.</strong > <br />Země: Česká republika, počet obyvatel: 1 275 406 <br />"
-        ; country = "Czech_Republic"; break;
-        case "Me": document.getElementById('spanDescription').innerHTML = "<strong>Město s jednou z nejvyšších průměrných teplot v Asii.<br />Průměrná roční teplota je kolem 29 °C (dle zdroje).</strong > <br />Země: Království Saúdská Arábie, počet obyvatel: 2 000 000"
-        ; country = "Saudi_Arabia"; break;
-        // case "Oj": document.getElementById('spanDescription').innerHTML = "<strong>Jendo z nejchladnějších trvale obydlených míst na zemi.<br /> Průměrná teplota za leden, únor a prosinec zůstává pod –40 °C.</strong > <br />Země: Ruská federace, počet obyvatel: 550"; country = "Russia"; break;
-        case "Qu": document.getElementById('spanDescription').innerHTML = "<strong> Nejdeštivější město na světě.<br /> Průměrné srážky za rok jsou 7 000 mm - 8 000 mm (dle zdroje)</strong > <br />Země: Kolumbie, počet obyvatel: 129 237"; country = "Choco"; break;
-        case "We": document.getElementById('spanDescription').innerHTML = "<strong>Největrnější město na světě.<br /> Průměrná rychlost větru za celý rok je 22 km/h a za září téměř 27 km/h.</strong > <br />Země: Nový Zéland, počet obyvatel: 180 000<br />"
-        ; country = "New_Zealand"; break;
-        case "Bo": document.getElementById('spanDescription').innerHTML = "<strong>Jedno z měst s nejvyšším výskytem bouřek na světě.<br />Město leží na úpatí sopky, na které bývá cca. 320 dní s bouřkou v roce.</strong > <br />Země: Indonésie, počet obyvatel: 1 091 396"; country = "Indonesia"; break;
-      }
-
-      const url = ServerAdress + '/weather/WeatherStack/' + town + ',%20' + country;
-      SendGetRequest(url);
-    }
-    function TestWeatherAndJokeForCity() {
-      settedWeather_code = document.getElementById("checkWeatherCode").value;
-      const url = ServerAdress + '/weather/WeatherTest/' + settedWeather_code;
-      SendGetRequest(url);
-    }
-
-    function SendGetRequest(url) {
-      const Http = new XMLHttpRequest();
-      Http.open("GET", url);
-      Http.send();
-      let retJSON;
-      Http.onreadystatechange = (e) => {
-        retJSON = Http.responseText;
-        const obj = JSON.parse(retJSON);
-        console.log(obj);
-        weather_code = obj.weather_code;
-        temperature = obj.temperature;
-        wind_speed = obj.windSpeed;
-        document.querySelector('[id="divPicture"]').innerHTML = '<img src="' + obj.pictureAddress + '" class="img-responsive rounded" temp="Weather picture" />';
-        document.getElementById('description').innerText = obj.description;
-        document.getElementById('temperature').innerText = temperature + " °C";
-        document.getElementById('windSpeed').innerText = wind_speed + " km/h";
-        document.getElementById('humidity').innerText = obj.humidity + " %";
-        document.querySelector('[id="JokeText"]').innerText = obj.content;
-        document.querySelector('[id="UserText"]').innerText = "Vtip vložil uživatel: Petr";
-        jokeId = obj.id;
-      }
-    }
-
-    function GetPreviousNextWeatherJoke(PrevNext) {
-      const Http = new XMLHttpRequest();
-      const url = ServerAdress + '/weather/WeatherStackPreviousNext/' + weather_code + ',%20' + temperature + ',%20' + wind_speed + ',%20' + jokeId + ',%20' + PrevNext;
-      console.log(url);
-      Http.open("GET", url);
-      Http.send();
-      let retJSON;
-      Http.onreadystatechange = (e) => {
-        retJSON = Http.responseText;
-        const obj = JSON.parse(retJSON);
-        console.log(obj)
-        document.querySelector('[id="JokeText"]').innerText = obj.Content;
-        document.querySelector('[id="UserText"]').innerText = "Vtip vložil uživatel: Petr";
-        jokeId = obj.Id;
-      }
-    }
-    window.onload = function () {
-      GetWeatherAndJokeForCity();
-    }
-  </script> -->
 </head>
 
 <body>
@@ -238,7 +157,7 @@
     crossorigin="anonymous"></script>
   <script src="bootstrap/dist/js/bootstrap.min.js"></script> -->
 
-  <script src="kolosalon.js"></script>
+  <!-- <script src="kolosalon.js"></script> -->
 
   <script type="text/javascript">
     $(function () {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="cz">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,54 +8,6 @@
   <link rel="stylesheet" href="css/custom.css" />
   <script language="JavaScript" src="WebApiJokes.js"> JAVA_SCRIPT </script>
   <title>Jokes</title>
-  <!-- <script language="JavaScript">
-    let setJokeId = 1;
-    let setJokeType = 2;
-    console.log("Hello");
-    function FcPost() {
-      event.preventDefault();
-      let User = document.Joke.User.value;
-      let TypeOfJoke = document.Joke.TypeOfJoke.value;
-      let Password = document.Joke.JokePassword.value;
-      let JokeContent = document.Joke.JokeContent.value;
-      let ServerAdress = "https://localhost:44397";
-      //let ServerAdress = "http://petrv.somee.com";
-      const JokeJSON = {
-        "id": 0,
-        "evaluation": 0,
-        "evaluationCount": 0,
-        "content": JokeContent,
-        "userName": User,
-        "jokeTypeId": TypeOfJoke,
-        "temperature": 0,
-        "sunRain": true,
-        "wind": 0,
-        "snow": true,
-        "season": 0
-      }
-
-      let xhr = new XMLHttpRequest(); // Creating a XHR object
-      let url = ServerAdress+"/Jokes/" + Password;
-      console.log(url);
-      xhr.open("POST", url, true); // open a connection
-      xhr.setRequestHeader("Content-Type", "application/json"); // Set the request header i.e. which type of content you are sending
-      xhr.onreadystatechange = function () { // Create a state change callback
-        if (xhr.readyState === 4 && xhr.status === 200) {// Alert received data from server
-          const obj = JSON.parse(this.responseText);
-          alert("Vložen vtip: \n" + obj.content);
-          document.Joke.JokePassword.value="";
-          document.Joke.JokeContent.value="";
-        }else if (xhr.readyState === 4 && xhr.status === 401){
-          alert("Zadáno neplatné heslo uživatele.\nHeslo uživatele Návštěvník je \"n\".");
-          document.Joke.JokePassword.value="";
-        }else if (xhr.readyState === 4 && xhr.status === 405){
-          alert("Je nutné vyplnit heslo uživatele.\nHeslo uživatele Návštěvník je \"n\".");
-        }
-      };
-      var data = JSON.stringify(JokeJSON); // Converting JSON data to string
-      xhr.send(data);// Sending data with the request
-    }
-  </script> -->
 </head>
 
 <body>

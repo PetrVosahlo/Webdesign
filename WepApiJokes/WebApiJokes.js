@@ -7,9 +7,14 @@ let jokeId = 1;
 let weather_code;
 let temperature;
 let wind_speed;
-// let ServerAdress = "https://localhost:44397";
-let ServerAdress = "http://petrv.somee.com";
-console.log("Hello");
+let pictureAddress;
+let description;
+let humidity;
+let content;
+
+let ServerAdress = "https://localhost:44397";
+//let ServerAdress = "http://petrv.somee.com";
+
 function FcPost() {
     event.preventDefault();
     let User = document.Joke.User.value;
@@ -52,58 +57,6 @@ function FcPost() {
     xhr.send(data);// Sending data with the request
 }
 
-function GetFirstJokeOfType(JokeType) {
-    const Http = new XMLHttpRequest();
-    const url = ServerAdress + '/Jokes/' + JokeType;
-    Http.open("GET", url);
-    Http.send();
-    let retJSON;
-    Http.onreadystatechange = (e) => {
-        retJSON = Http.responseText;
-        const obj = JSON.parse(retJSON);
-        //console.log(obj.content)
-        document.querySelector('[id="JokeText"]').innerHTML = obj.content;
-        userName = obj.userName;
-        document.querySelector('[id="UserText"]').innerHTML = "Vtip vložil uživatel: " + userName;
-        setJokeId = obj.id;
-        setJokeType = obj.jokeTypeId;
-    }
-}
-function GetJokeOfId(EditJokeId) {
-    const Http = new XMLHttpRequest();
-    const url = ServerAdress + '/Edit/' + EditJokeId;
-    console.log(url);
-    Http.open("GET", url);
-    Http.send();
-    let retJSON;
-    Http.onreadystatechange = (e) => {
-        retJSON = Http.responseText;
-        const obj = JSON.parse(retJSON);
-        document.querySelector('[id="JokeText"]').innerHTML = obj.content;
-        userName = obj.userName;
-        document.querySelector('[id="UserText"]').innerHTML = "Vtip vložil uživatel: " + userName;
-        setJokeId = obj.id;
-        //console.log("setJokeId"+setJokeId);
-        setJokeType = obj.jokeTypeId;
-    }
-}
-function GetPreviousNextJokeOfType(PrevNext) {
-    const Http = new XMLHttpRequest();
-    const url = ServerAdress + '/Jokes/' + setJokeId + ',%20' + setJokeType + ',%20' + PrevNext;
-    Http.open("GET", url);
-    Http.send();
-    let retJSON;
-    Http.onreadystatechange = (e) => {
-        retJSON = Http.responseText;
-        const obj = JSON.parse(retJSON);
-        document.querySelector('[id="JokeText"]').innerHTML = obj.content;
-        userName = obj.userName;
-        document.querySelector('[id="UserText"]').innerHTML = "Vtip vložil uživatel: " + userName;
-        setJokeId = obj.id;
-        //console.log("setJokeId"+setJokeId);
-        setJokeType = obj.jokeTypeId;
-    }
-}
 function EditModal() {
     document.getElementById('Mod1Password').value = "";
     document.getElementById('Mod1Content').value = document.querySelector('[id="JokeText"]').innerHTML;
@@ -142,6 +95,7 @@ function SaveEditJoke() {
     var data = JSON.stringify(JokeJSON); // Converting JSON data to string
     xhr.send(data);// Sending data with the request
 }
+
 function DeleteModal() {
     document.getElementById('Mod2Password').value = "";
     document.querySelector('[id="Mod2LabelPassword"]').innerHTML = "Heslo uživatele " + userName;
@@ -166,10 +120,35 @@ function DeleteJoke() {
     xhr.send();// Sending data with the request
 }
 
+async function GetFirstJokeOfType(JokeType) {
+    const url = ServerAdress + '/Jokes/' + JokeType;
+    jSONresponse = await SendGetRequest(url);
+    FillJokeForm(jSONresponse);
+}
 
-function GetWeatherAndJokeForCity() {
+async function GetJokeOfId(EditJokeId) {
+    const url = ServerAdress + '/Edit/' + EditJokeId;
+    jSONresponse = await SendGetRequest(url);
+    FillJokeForm(jSONresponse);
+}
+
+async function GetPreviousNextJokeOfType(PrevNext) {
+    const url = ServerAdress + '/Jokes/' + setJokeId + ',%20' + setJokeType + ',%20' + PrevNext;
+    jSONresponse = await SendGetRequest(url);
+    FillJokeForm(jSONresponse);
+}
+
+function FillJokeForm(jSONresponse) {
+    content = jSONresponse.content;
+    userName = jSONresponse.userName;
+    setJokeId = jSONresponse.id;
+    setJokeType = jSONresponse.jokeTypeId;
+    document.querySelector('[id="JokeText"]').innerHTML = content;
+    document.querySelector('[id="UserText"]').innerHTML = "Vtip vložil uživatel: " + userName;
+}
+
+async function GetWeatherAndJokeForCity() {
     let townId;
-    console.log("OK ");
     town = document.getElementById('selTown').value;
     let selTown = document.getElementById('selTown');
     townId = selTown.options[selTown.selectedIndex].getAttribute('townId');
@@ -188,53 +167,52 @@ function GetWeatherAndJokeForCity() {
     }
 
     const url = ServerAdress + '/weather/WeatherStack/' + town + ',%20' + country;
-    SendGetRequest(url);
+    jSONresponse = await SendGetRequest(url);
+    FillWeatherJokeForm(jSONresponse);
 }
-function TestWeatherAndJokeForCity() {
-    settedWeather_code = document.getElementById("checkWeatherCode").value;
-    const url = ServerAdress + '/weather/WeatherTest/' + settedWeather_code;
-    SendGetRequest(url);
-}
-
-function SendGetRequest(url) {
-    const Http = new XMLHttpRequest();
-    Http.open("GET", url);
-    Http.send();
-    let retJSON;
-    Http.onreadystatechange = (e) => {
-        retJSON = Http.responseText;
-        const obj = JSON.parse(retJSON);
-        console.log(obj);
-        weather_code = obj.weather_code;
-        temperature = obj.temperature;
-        wind_speed = obj.windSpeed;
-        document.querySelector('[id="divPicture"]').innerHTML = '<img src="' + obj.pictureAddress + '" class="img-responsive rounded" temp="Weather picture" />';
-        document.getElementById('description').innerText = obj.description;
-        document.getElementById('temperature').innerText = temperature + " °C";
-        document.getElementById('windSpeed').innerText = wind_speed + " km/h";
-        document.getElementById('humidity').innerText = obj.humidity + " %";
-        document.querySelector('[id="JokeText"]').innerText = obj.content;
-        document.querySelector('[id="UserText"]').innerText = "Vtip vložil uživatel: Petr";
-        jokeId = obj.id;
-    }
+async function TestWeatherAndJokeForCity() {
+    let jSONresponse;
+    weather_code = document.getElementById("checkWeatherCode").value;
+    const url = ServerAdress + '/weather/WeatherTest/' + weather_code;
+    jSONresponse = await SendGetRequest(url);
+    FillWeatherJokeForm(jSONresponse);
 }
 
-function GetPreviousNextWeatherJoke(PrevNext) {
-    const Http = new XMLHttpRequest();
+async function GetPreviousNextWeatherJoke(PrevNext) {
+    let jSONresponse;
     const url = ServerAdress + '/weather/WeatherStackPreviousNext/' + weather_code + ',%20' + temperature + ',%20' + wind_speed + ',%20' + jokeId + ',%20' + PrevNext;
-    console.log(url);
-    Http.open("GET", url);
-    Http.send();
-    let retJSON;
-    Http.onreadystatechange = (e) => {
-        retJSON = Http.responseText;
-        const obj = JSON.parse(retJSON);
-        console.log(obj)
-        document.querySelector('[id="JokeText"]').innerText = obj.Content;
-        document.querySelector('[id="UserText"]').innerText = "Vtip vložil uživatel: Petr";
-        jokeId = obj.Id;
-    }
+    jSONresponse = await SendGetRequest(url);
+    content = jSONresponse.Content;
+    jokeId = jSONresponse.Id;
+    document.querySelector('[id="JokeText"]').innerText = jSONresponse.Content;
+    document.querySelector('[id="UserText"]').innerText = "Vtip vložil uživatel: Petr";
 }
+
+async function SendGetRequest(url) {
+    const response = await fetch(url);
+    const jSONresponse = await response.json();
+    console.log(jSONresponse);
+    return jSONresponse;
+}
+
+function FillWeatherJokeForm(jSONresponse) {
+    weather_code = jSONresponse.Weather_code;
+    temperature = jSONresponse.Temperature;
+    wind_speed = jSONresponse.WindSpeed;
+    pictureAddress = jSONresponse.PictureAddress;
+    description = jSONresponse.Description;
+    humidity = jSONresponse.Humidity;
+    content = jSONresponse.Content;
+    jokeId = jSONresponse.Id;
+    document.querySelector('[id="divPicture"]').innerHTML = '<img src="' + pictureAddress + '" class="img-responsive rounded" temp="Weather picture" />';
+    document.getElementById('description').innerText = description;
+    document.getElementById('temperature').innerText = temperature + " °C";
+    document.getElementById('windSpeed').innerText = wind_speed + " km/h";
+    document.getElementById('humidity').innerText = humidity + " %";
+    document.querySelector('[id="JokeText"]').innerText = content;
+    document.querySelector('[id="UserText"]').innerText = "Vtip vložil uživatel: Petr";
+}
+
 window.onload = function () {
     GetWeatherAndJokeForCity();
 }
